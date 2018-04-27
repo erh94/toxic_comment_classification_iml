@@ -4,15 +4,15 @@
 # Please folow the directory structure
 
 #toxic_comment_classification
-      #embeddings/
-              *all embeddings files here* 
-              can be local on system
-      #input/
+      <br>embeddings/
+         <br>     *all embeddings files here* 
+         <br>    can be local on system
+      <br>input/
             <br>test.csv
             <br>train.csv
             <br>sample_submission.csv
-      #models/
+      <br>models/
             <br>*trained models/ saved models/ weights/ classifiers*
-      #submission/
+      <br>submission/
             *submission files*
       

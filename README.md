@@ -3,16 +3,16 @@
 
 # Please folow the directory structure
 
-toxic_comment_classification
-      embeddings/
+#toxic_comment_classification
+      #embeddings/
               *all embeddings files here* 
               can be local on system
-      input/
-            test.csv
-            train.csv
-            sample_submission.csv
-      models/
-            *trained models/ saved models/ weights/ classifiers*
-      submission/
+      #input/
+            <br>test.csv
+            <br>train.csv
+            <br>sample_submission.csv
+      #models/
+            <br>*trained models/ saved models/ weights/ classifiers*
+      #submission/
             *submission files*
       

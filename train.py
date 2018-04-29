@@ -10,6 +10,8 @@ from keras.layers import GRU, Bidirectional, GlobalAveragePooling1D, GlobalMaxPo
 from keras.preprocessing import text, sequence
 from keras.callbacks import Callback
 
+global maxlen,max_features,embed_size,x_train_1,y_train,embedding_matrix
+
 class RocAucEvaluation(Callback):
     def __init__(self, validation_data=(), interval=1):
         super(Callback, self).__init__()
@@ -46,15 +48,45 @@ def get_model():
 if __name__ == "__main__":
 
 	# Read inputs a) Max Feat b) Embed_size c) Embed_matrix d) maxlen 
+	
+	with open('./models/metadata.pkl','rb') as handle: 
+		metadata=pickle.load(handle)
+	
+	handle.close()	
+
+	with open('./models/embedding_matrix.pkl','rb') as handle: 
+		embedding_matrix=pickle.load(handle)
+			
+	handle.close()	
+
+
+	maxlen = metadata['max_len']
+	max_features = metadata['max_features']
+	embed_size = metadata['embed_size']	
+
+
+
 
 	model = get_model()
 	print("Created Model \n")
-
 
 	batch_size = 32
 	epochs = 2
 
 	# Read x_train_1 y_train
+
+	
+
+	with open('./models/x_train.pkl','rb') as handle: 
+		x_train_1 = pickle.load(handle)
+
+	with open('./models/y_train.pkl','rb') as handle: 
+		y_train=pickle.load(handle)
+
+	
+
+
+
 
 	X_tra, X_val, y_tra, y_val = train_test_split(x_train_1, y_train, train_size=0.95, random_state=233)
 	RocAuc = RocAucEvaluation(validation_data=(X_val, y_val), interval=1)
@@ -65,7 +97,7 @@ if __name__ == "__main__":
 	# serialize model to JSON
 	model_json = model.to_json()
 	with open("./models/GRU_feat_none.json", "w") as json_file:
-    	json_file.write(model_json)
+		json_file.write(model_json)
 
 	# serialize weights to HDF5
 	model.save_weights("./models/GRU_feat_none.h5")

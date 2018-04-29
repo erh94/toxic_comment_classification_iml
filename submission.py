@@ -1,3 +1,4 @@
+import h5py
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -21,8 +22,9 @@ if __name__ == "__main__":
 	loaded_model.load_weights("./models/GRU_feat_none.h5")
 	print("Loaded model from disk")
 
-	with open('./models/x_test.pkl','rb') as handle: 
-		x_test = pickle.load(handle)
+	with h5py.File('./models/x_test.h5','r') as handle: 
+	 	x_test = handle.get('x_test')
+	 	x_test = np.array(x_test)
 
 	y_pred = loaded_model.predict(x_test, batch_size=1024)
 	y_pred = np.delete(y_pred,6,1)

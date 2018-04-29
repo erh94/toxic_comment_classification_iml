@@ -9,6 +9,9 @@ from keras.layers import Input,Dense,Embedding,SpatialDropout1D, concatenate
 from keras.layers import GRU, Bidirectional, GlobalAveragePooling1D, GlobalMaxPooling1D
 from keras.preprocessing import text, sequence
 from keras.callbacks import Callback
+import h5py
+
+global maxlen,max_features,embed_size,x_train_1,y_train,embedding_matrix
 
 class RocAucEvaluation(Callback):
     def __init__(self, validation_data=(), interval=1):
@@ -46,15 +49,31 @@ def get_model():
 if __name__ == "__main__":
 
 	# Read inputs a) Max Feat b) Embed_size c) Embed_matrix d) maxlen 
+	
+	with open('./models/metadata.pkl','rb') as handle:
+	 	metadata=pickle.load(handle)
+
+	with h5py.File('./models/x_train.h5','r') as handle: 
+	 	x_train=handle.get('x_train')
+	 	x_train_1 = np.array(x_train)	
+
+	with h5py.File('./models/y_train.h5','r') as handle: 
+	 	y_train=handle.get('y_train')
+	 	y_train = np.array(y_train)
+
+	with h5py.File('./models/embedding_matrix.h5','r') as handle: 
+	 	embedding_matrix = handle.get('embedding_matrix')
+	 	embedding_matrix = np.array(embedding_matrix) 		 	
+
+	maxlen = metadata['max_len']
+	max_features = metadata['max_features']
+	embed_size = metadata['embed_size']	
 
 	model = get_model()
 	print("Created Model \n")
 
-
 	batch_size = 32
 	epochs = 2
-
-	# Read x_train_1 y_train
 
 	X_tra, X_val, y_tra, y_val = train_test_split(x_train_1, y_train, train_size=0.95, random_state=233)
 	RocAuc = RocAucEvaluation(validation_data=(X_val, y_val), interval=1)
@@ -65,7 +84,7 @@ if __name__ == "__main__":
 	# serialize model to JSON
 	model_json = model.to_json()
 	with open("./models/GRU_feat_none.json", "w") as json_file:
-    	json_file.write(model_json)
+		json_file.write(model_json)
 
 	# serialize weights to HDF5
 	model.save_weights("./models/GRU_feat_none.h5")

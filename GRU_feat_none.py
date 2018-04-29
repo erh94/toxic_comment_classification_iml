@@ -36,7 +36,7 @@ os.environ['OMP_NUM_THREADS']='4'
 # In[6]:
 
 
-Embedding_file = './glove.6B.50d.txt'
+Embedding_file = './embeddings/glove.6B.300d.txt'
 
 
 # In[9]:
@@ -79,7 +79,7 @@ print("Data loaded..\n")
 # train["comment_text"]
 x_train = train["comment_text"].fillna("fillna").values
 # X_train is an array
-# y_train = train[list_classes].values
+y_train = train[list_classes].values
 # y_train
 x_test = test["comment_text"].fillna("fillna").values
 

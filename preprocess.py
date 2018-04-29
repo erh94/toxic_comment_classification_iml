@@ -5,6 +5,8 @@ from keras.preprocessing.text import Tokenizer
 from keras.preprocessing import sequence
 import json
 import h5py
+import warnings
+warnings.filterwarnings("ignore")
 
 max_features = 30000
 maxlength_sentences = 400
@@ -28,6 +30,8 @@ def make_tokenizer():
     #saving the tokenizer for preprocessing in predict
     with open('./models/tokenizer.pkl', 'wb') as handle:
         pickle.dump(tokenizer, handle, protocol=pickle.DEFAULT_PROTOCOL)
+
+    
 
 def preprocessing():
     
@@ -84,13 +88,14 @@ def save_preprocess_data():
     with h5py.File('./models/y_train.h5','w') as h5f_handle:
         h5f_handle.create_dataset('y_train',data=y_train,compression="gzip",compression_opts=9)
 
+    with h5py.File('./models/embedding_matrix.h5','w') as h5f_handle:
+        h5f_handle.create_dataset('embedding_matrix',data=embedding_matrix,compression="gzip",compression_opts=9)
+
     # with open('./models/x_test.pkl', 'wb') as handle:
     #     pickle.dump(x_test, handle, protocol=pickle.DEFAULT_PROTOCOL)
 
     # with open('./models/y_train.pkl', 'wb') as handle:
     #     pickle.dump(y_train, handle, protocol=pickle.DEFAULT_PROTOCOL)
-    with h5py.File('./models/embedding_matrix.h5','w') as h5f_handle:
-        h5f_handle.create_dataset('embedding_matrix',data=embedding_matrix,compression="gzip",compression_opts=9)
 
     # with open('./models/embedding_matrix.pkl', 'wb') as handle:
     #     pickle.dump(embedding_matrix, handle,protocol=pickle.DEFAULT_PROTOCOL)
@@ -114,10 +119,7 @@ def main():
 
     load_embedding_index()
     
-
     preprocessing()
-
-
 
     save_preprocess_data()
 

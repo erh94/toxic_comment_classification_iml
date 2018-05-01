@@ -10,6 +10,8 @@ from keras.layers import GRU, Bidirectional, GlobalAveragePooling1D, GlobalMaxPo
 from keras.preprocessing import text, sequence
 from keras.callbacks import Callback
 import h5py
+from keras.callbacks import TensorBoard
+from time import time 
 
 global maxlen,max_features,embed_size,x_train_1,y_train,embedding_matrix
 
@@ -20,11 +22,10 @@ class RocAucEvaluation(Callback):
         self.interval = interval
         self.X_val, self.y_val = validation_data
 
-    def on_epoch_end(self, epoch, logs={}):
-        if epoch % self.interval == 0:
+    def on_batch_end(self, epoch, logs={}):
             y_pred = self.model.predict(self.X_val, verbose=0)
             score = roc_auc_score(self.y_val, y_pred)
-            print("\n ROC-AUC - epoch: %d - score: %.6f \n" % (epoch+1, score))
+            print("\n ROC-AUC - till now: %d - score: %.6f \n" % (batch+1, score))
 
 def get_model():
     inp = Input(shape=(maxlen, ))
@@ -72,13 +73,14 @@ if __name__ == "__main__":
 	model = get_model()
 	print("Created Model \n")
 
-	batch_size = 32
+	batch_size = 256
 	epochs = 2
 
 	X_tra, X_val, y_tra, y_val = train_test_split(x_train_1, y_train, train_size=0.95, random_state=233)
 	RocAuc = RocAucEvaluation(validation_data=(X_val, y_val), interval=1)
 
-	hist = model.fit(X_tra, y_tra, batch_size=batch_size, epochs=epochs, validation_data=(X_val, y_val))
+	tensorboard = TensorBoard(log_dir="logs/{}".format(time()),write_graph=True,write_images=True)
+	hist = model.fit(X_tra, y_tra, batch_size=batch_size, epochs=epochs, validation_data=(X_val, y_val),callbacks=[tensorboard])
 
 	# serialize model to JSON
 	model_json = model.to_json()

@@ -9,7 +9,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 max_features = 30000
-maxlength_sentences = 400
+maxlength_sentences = 200
 embed_vec_size = 300
 list_classes = ["toxic", "severe_toxic", "obscene", "threat", "insult", "identity_hate"]
 in_dir = './input/'

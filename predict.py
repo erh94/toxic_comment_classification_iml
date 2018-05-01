@@ -33,8 +33,7 @@ def preprocess(comment):
 	
 	with open(mod_dir+'metadata.pkl','rb') as handle:
 		metadata = pickle.load(handle)
-	maxlen=100
-	metadata['max_len']
+	maxlen=metadata['max_len']
 	max_features = metadata['max_features']
 	embed_size = metadata['embed_size']
 	

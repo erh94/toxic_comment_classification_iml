@@ -29,8 +29,8 @@ class RocAucEvaluation(Callback):
 def get_model():
     inp = Input(shape=(maxlen, ))
     x = Embedding(max_features, embed_size, weights=[embedding_matrix])(inp)
-    x = SpatialDropout1D(0.2)(x)
-    x = Bidirectional(GRU(80, return_sequences=True))(x)
+    x = SpatialDropout1D(0.1)(x)
+    x = Bidirectional(GRU(100, return_sequences=True))(x)
     avg_pool = GlobalAveragePooling1D()(x)
     max_pool = GlobalMaxPooling1D()(x)
     conc = concatenate([avg_pool, max_pool])
@@ -38,7 +38,7 @@ def get_model():
     
     model = Model(inputs=inp, outputs=outp)
     model.compile(loss='binary_crossentropy',
-                  optimizer='adam',
+                  optimizer='rmsprop',
                   metrics=['accuracy'])
 
     return model
@@ -78,8 +78,7 @@ if __name__ == "__main__":
 	X_tra, X_val, y_tra, y_val = train_test_split(x_train_1, y_train, train_size=0.95, random_state=233)
 	RocAuc = RocAucEvaluation(validation_data=(X_val, y_val), interval=1)
 
-	hist = model.fit(X_tra, y_tra, batch_size=batch_size, epochs=epochs, validation_data=(X_val, y_val),
-                 callbacks=[RocAuc], verbose=2)
+	hist = model.fit(X_tra, y_tra, batch_size=batch_size, epochs=epochs, validation_data=(X_val, y_val))
 
 	# serialize model to JSON
 	model_json = model.to_json()

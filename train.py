@@ -32,8 +32,8 @@ def get_model():
     x = Embedding(max_features, embed_size, weights=[embedding_matrix])(inp)
     x = SpatialDropout1D(0.1)(x)
     x = Bidirectional(GRU(100, return_sequences=True))(x)
-    x = SpatialDropout1D(0.1)(x)	
-    x= Dense(50,activation='tanh')(x)
+    # x = SpatialDropout1D(0.1)(x)	
+    # x= Dense(50,activation='tanh')(x)
     avg_pool = GlobalAveragePooling1D()(x)
     max_pool = GlobalMaxPooling1D()(x)
     conc = concatenate([avg_pool, max_pool])
@@ -86,9 +86,9 @@ if __name__ == "__main__":
 
 	# serialize model to JSON
 	model_json = model.to_json()
-	with open("./models/GRU_Dense.json", "w") as json_file:
+	with open("./models/GRU_Best.json", "w") as json_file:
 		json_file.write(model_json)
 
 	# serialize weights to HDF5
-	model.save_weights("./models/GRU_Dense.h5")
+	model.save_weights("./models/GRU_Best.h5")
 	print("***************Saved model to disk named GRU_Dense***************")

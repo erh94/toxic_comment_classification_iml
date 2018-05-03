@@ -32,6 +32,8 @@ def get_model():
     x = Embedding(max_features, embed_size, weights=[embedding_matrix])(inp)
     x = SpatialDropout1D(0.1)(x)
     x = Bidirectional(GRU(100, return_sequences=True))(x)
+	x = SpatialDropout1D(0.1)(x)	
+	x= Dense(50,activation='tanh')(x)
     avg_pool = GlobalAveragePooling1D()(x)
     max_pool = GlobalMaxPooling1D()(x)
     conc = concatenate([avg_pool, max_pool])

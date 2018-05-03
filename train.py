@@ -86,9 +86,9 @@ if __name__ == "__main__":
 
 	# serialize model to JSON
 	model_json = model.to_json()
-	with open("./models/GRU_feat_none.json", "w") as json_file:
+	with open("./models/GRU_Dense.json", "w") as json_file:
 		json_file.write(model_json)
 
 	# serialize weights to HDF5
-	model.save_weights("./models/GRU_feat_none.h5")
-	print("Saved model to disk")
+	model.save_weights("./models/GRU_Dense.h5")
+	print("***************Saved model to disk named GRU_Dense***************")

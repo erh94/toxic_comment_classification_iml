@@ -15,11 +15,11 @@ if __name__ == "__main__":
 
 	submission = pd.read_csv('./input/sample_submission.csv')
 	list_classes = ["toxic", "severe_toxic", "obscene", "threat", "insult", "identity_hate"]
-	json_file = open('./models/GRU_feat_none.json', 'r')
+	json_file = open('./models/GRU_Dense.json', 'r')
 	loaded_model_json = json_file.read()
 	json_file.close()
 	loaded_model = model_from_json(loaded_model_json)
-	loaded_model.load_weights("./models/GRU_feat_none.h5")
+	loaded_model.load_weights("./models/GRU_Dense.h5")
 	print("Loaded model from disk")
 
 	with h5py.File('./models/x_test.h5','r') as handle: 
@@ -30,4 +30,4 @@ if __name__ == "__main__":
 	y_pred = np.delete(y_pred,6,1)
 	submission[list_classes] = y_pred
 	#submission.drop(['none'],axis=1)
-	submission.to_csv('./output/submission_GRU_glove.csv', index=False)
+	submission.to_csv('./output/submission_GRU_Dense.csv', index=False)

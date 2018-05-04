@@ -75,13 +75,13 @@ if __name__ == "__main__":
 	model = get_model()
 	print("Created Model \n")
 
-	batch_size = 64 
+	batch_size = 32 
 	epochs = 2
 
 	X_tra, X_val, y_tra, y_val = train_test_split(x_train_1, y_train, train_size=0.95, random_state=233)
 	RocAuc = RocAucEvaluation(validation_data=(X_val, y_val), interval=1)
 
-	tensorboard = TensorBoard(log_dir="logs/{}".format(time()),write_graph=True,write_images=True)
+	tensorboard = TensorBoard(log_dir="logs/{}".format(time()),write_graph=False,write_images=False)
 	hist = model.fit(X_tra, y_tra, batch_size=batch_size, epochs=epochs, validation_data=(X_val, y_val),callbacks=[tensorboard])
 
 	# serialize model to JSON

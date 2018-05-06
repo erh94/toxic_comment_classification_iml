@@ -1,5 +1,5 @@
-# toxic_comment_classification_iml
-# First Commit
+# Toxic Comment Classification Kaggle Challenge 
+
 
 # Please folow the directory structure
 
